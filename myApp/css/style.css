@@ -1,0 +1,14 @@
+/* p{color: blue;background-color: gray;} */
+
+.btn {
+    border-radius: 20px;
+}
+
+#redP {
+    color: red;
+}
+
+footer{
+    position: absolute;
+    bottom: 0;
+}
