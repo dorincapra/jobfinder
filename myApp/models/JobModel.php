@@ -75,6 +75,10 @@ class JobModel extends AppController
         return $displayString;
     }
 
+    public function deleteJob($id){
+        //delete job based on id - through Delete button that is only in the employer's menu
+    }
+
 
 
 }

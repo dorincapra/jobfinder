@@ -27,6 +27,7 @@ class UsersModel extends DBModel
             if(password_verify($uPass, $result['pass'])){
                 $userDetails[0] = $result['accType'];
                 $userDetails[1] = $result['name'];
+                $userDetails[2] = $result['id'];
                 return $userDetails;
             }
             else return false;
@@ -49,6 +50,10 @@ class UsersModel extends DBModel
 
         return $myPrep->execute();
     }
+
+
+
+   
 
 
 

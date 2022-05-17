@@ -13,24 +13,21 @@ class ApplicantController extends AppController
         if(isset($_SESSION['user'])){
             $hm = "Bine ai venit " . $_SESSION['user'] . "!";
             $data['mainContent'] = $hm;
+            $data['mainContent'] .= $this->render(APP_PATH.VIEWS.'applicantView.html', $data);
+
 
             //show a list of jobs - from jobModel->showJobs();
-            $showJobs = "<div class='container-fluid my-2'>";
-            $showJobs .= "<h1>Lapte</h1>";
-            $showJobs .= "</div>";
-
             if($jobModel->showJobs()){
                 $result = $jobModel->showJobs();
                 $displayString = '';
               
-
                 foreach($result as $result){
                   //display each job
                   $displayString .= $jobModel->displayJob($result);
                 }
                 $data['mainContent'] .= $displayString;
             }
-            else $data['mainContent'] .= "nu a mers(sa faci o pagina cu eroare)";
+            else $data['mainContent'] .= "it did not work(handle the errors)";
 
         }
 

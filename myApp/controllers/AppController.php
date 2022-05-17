@@ -10,8 +10,9 @@ class AppController extends DBModel
                             'login' => 'LoginController',
                             'signup' => 'SignUpController',
                             'logout' => 'LogoutController',
-                            'applicant' => 'ApplicantController'
-                        ];
+                            'applicant' => 'ApplicantController',
+                            'employer' => 'EmployerController',
+                            'cv'=> 'CVController'                        ];
 
     public function __construct(){
         $this->init();
