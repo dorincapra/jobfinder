@@ -8,17 +8,27 @@ class EmployerController extends AppController
 
     public function init(){
         session_start();
-        $cv = new CVModel;
+        $job = new JobModel;
+        
+        $hm = "Bine ai venit " . $_SESSION['user'] . "!";
+        $data['mainContent'] = $hm;
+        $employerId = $_SESSION['userId'];
+        $displayString = "";
+        
+        //get the employer id and display it's jobs to be displayed in {{employerContent}}
+        $result = $job->filterJobs("", "", "", "", $employerId);
 
-        if(isset($_SESSION['user'])){
-            $hm = "Bine ai venit " . $_SESSION['user'] . "!";
-            $data['mainContent'] = $hm;
 
-
+        foreach ($result as $result){
+            $displayString .= $job->displayJob($result['jobName'],$result['salary'],$result['location'],$result['schedule'], $result['id']);
         }
         
-        $data['mainContent'] .= "nu a mers(sa faci o pagina cu eroare)";
-        
+        $data['employerContent'] = $displayString;
+
+
+
+
+        $data['mainContent'] .= $this->render(APP_PATH.VIEWS.'employerView.html', $data);
         echo $this->render(APP_PATH.VIEWS.'baseLayout.html', $data);
 
         }

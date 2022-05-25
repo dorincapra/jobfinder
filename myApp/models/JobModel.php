@@ -19,25 +19,24 @@ class JobModel extends AppController
     }
 
 
-    public function init(){
-        //if we have details about a job, display -> filterJobs
-        //if not, display first 10 -> showJobs
-    }
+    // public function init(){
+    //     //if we have details about a job, display -> filterJobs
+    //     //if not, display first 10 -> showJobs
+    // }
 
 
-    public function addJob($employerId, $jobName, $salary, $location, $jobDescription, $schedule){
-       
+
         //add job in DB through a form in the website
+    public function addJob($employerId, $jobName, $salary, $location, $jobDescription, $schedule){
         $q = "INSERT INTO `jobs`(`employerId`, `jobName`, `salary`, `location`, `jobDescription`, `schedule`) VALUES (?, ?, ?, ?, ?, ?);";
         $myPrep = $this->db()->prepare($q);
-        $myPrep->bind_param("isssss", $email, $user, $hash, $type);
+        $myPrep->bind_param("isssss",$employerId, $jobName, $salary, $location, $jobDescription, $schedule);
         return $myPrep->execute();
     }
 
 
 
-    public function filterJobs($jobName, $salary, $location, $schedule){
-        //show job filtered
+    public function filterJobs($jobName, $salary, $location, $schedule, $employerId){
         $q = "SELECT * FROM `jobs` WHERE `id` IS NOT NULL";
         //if any of them isset, add them in the query
         if($jobName){
@@ -49,7 +48,13 @@ class JobModel extends AppController
         if($location){
             $q .= " AND `location` = $location";
         }
-        return $result = $q->get_result()->fetch_assoc();
+        if($employerId){
+            $q .= " AND `employerID` = $employerId";
+        }
+        $myPrep = $this->db()->prepare($q);
+        $myPrep->execute();
+        return $result = $myPrep->get_result()->fetch_all(MYSQLI_ASSOC);
+
     }
 
     public function showJobs(){
@@ -57,19 +62,26 @@ class JobModel extends AppController
         $myPrep = $this->db()->prepare($q);
         $myPrep->execute();
 
-        //returns array with # of elements = # of jobs in DB
         return $result = $myPrep->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function displayJob($result){
 
         //design for one job div
-        $displayString = "<div class='container bg-dark text-light m-4'>";
-        $displayString .= "<br>Position name: " . $result['jobName'];
-        $displayString .= "<br>Salary: " . $result['salary'];
-        $displayString .= "<br>Location: " . $result['location'];
-        $displayString .= "<br>Schedule: " . $result['schedule'];
-        $displayString .= "<button class='btn btn-primary'>Apply</button>";
+    public function displayJob($jobName, $salary, $location, $schedule, $jobId){
+
+        //displays the job depending of the user type
+        if($_SESSION['accType'] == "applicant"){
+            $buttons = "<a class='btn btn-primary' href='#'>Apply</a>";
+        } else if($_SESSION['accType'] == "employer") {
+            $buttons = "<a class='btn btn-danger' href='#'>Delete</a>";
+        }
+
+        $displayString = "<div id='$jobId' class='container bg-dark text-light m-4'>";
+        $displayString .= "<br>Position name: " . $jobName;
+        $displayString .= "<br>Salary: " . $salary;
+        $displayString .= "<br>Location: " . $location;
+        $displayString .= "<br>Schedule: " . $schedule;
+        $displayString .= $buttons;
         $displayString .= "</div>";
                 
         return $displayString;
@@ -79,6 +91,28 @@ class JobModel extends AppController
         //delete job based on id - through Delete button that is only in the employer's menu
     }
 
+    public function applyToJob($jobId){
+
+        //locate in db the job based on jobId - get from there employerId 
+        //locate in the db the cV based on userId
+        //insert into `applications` jobid, applicantId, employerId
+        
+        $userId = $_SESSION(['userId']);
+        echo $jobId;
+        
+    }
+
+
+    //not tested
+    public function displayEmployerApplications($employerId){
+        //display all applications from DB for that specific employer
+        $q = "SELECT * FROM `applications` WHERE `employerId` = ?";
+        $myPrep = $this->db()->prepare($q);
+        $myPrep->bind_param("s", $employerId);
+        $myPrep->execute();
+        $result = $myPrep->get_result()->fetch_all(MYSQLI_ASSOC);
+        //add return design
+    }
 
 
 }

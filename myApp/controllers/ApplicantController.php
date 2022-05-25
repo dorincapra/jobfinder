@@ -23,7 +23,7 @@ class ApplicantController extends AppController
               
                 foreach($result as $result){
                   //display each job
-                  $displayString .= $jobModel->displayJob($result);
+                  $displayString .= $jobModel->displayJob($result['jobName'],$result['salary'],$result['location'],$result['schedule'], $result['id']);
                 }
                 $data['mainContent'] .= $displayString;
             }

@@ -12,7 +12,8 @@ class AppController extends DBModel
                             'logout' => 'LogoutController',
                             'applicant' => 'ApplicantController',
                             'employer' => 'EmployerController',
-                            'cv'=> 'CVController'                        ];
+                            'cv'=> 'CVController' ,
+                            'job' => 'JobController'                       ];
 
     public function __construct(){
         $this->init();

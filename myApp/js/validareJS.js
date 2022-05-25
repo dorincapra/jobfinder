@@ -9,4 +9,6 @@ document.querySelector('#signUpForm').addEventListener('submit',
             alert('Parolele nu sunt identice!');
             e.preventDefault();
         }
-})
+});
+
+
