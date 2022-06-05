@@ -12,3 +12,8 @@ footer{
     position: absolute;
     bottom: 0;
 }
+
+#hero{
+    background-image: url(/myApp/img/hero.jpg);
+}
+

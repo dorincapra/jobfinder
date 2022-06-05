@@ -18,16 +18,16 @@
   <body>
 
 
-<h1>Job View</h1>
-
-{{mainContent}}
+<div class="container text-center">
+  <h1>Job View</h1>
+</div>
 
 
 <div class="container">
-    <form method="POST" action="?page=job">
+    <form method="POST" action="?page=addJob">
         <div class="form-group">
           <label for="jobName">Job Name:</label>
-          <input type="text" class="form-control" name="jobName" id="jobName" aria-describedby="emailHelp" value="{{age}}">
+          <input type="text" class="form-control" name="jobName" id="jobName" aria-describedby="emailHelp" placeholder="ex: Manager">
         </div>
         <div class="form-group">
           <label for="salary">Salary:</label>

@@ -53,6 +53,15 @@ class UsersModel extends DBModel
 
 
 
+    public function getUserDetails($userId){
+        $q = "SELECT * FROM `users` where `id` = ?";
+        $myPrep = $this->db()->prepare($q);
+        $myPrep->bind_param("i", $userId);
+        $myPrep->execute();
+
+        return $result=$myPrep->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
    
 
 

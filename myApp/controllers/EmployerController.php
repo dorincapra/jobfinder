@@ -20,7 +20,7 @@ class EmployerController extends AppController
 
 
         foreach ($result as $result){
-            $displayString .= $job->displayJob($result['jobName'],$result['salary'],$result['location'],$result['schedule'], $result['id']);
+            $displayString .= $this->displayJob($result['jobName'],$result['salary'],$result['location'],$result['schedule'], $result['id']);
         }
         
         $data['employerContent'] = $displayString;
@@ -29,7 +29,7 @@ class EmployerController extends AppController
 
 
         $data['mainContent'] .= $this->render(APP_PATH.VIEWS.'employerView.html', $data);
-        echo $this->render(APP_PATH.VIEWS.'baseLayout.html', $data);
+        echo $this->render(APP_PATH.VIEWS.'authedBaseLayout.html', $data);
 
         }
 

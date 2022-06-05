@@ -60,11 +60,42 @@ class CVModel extends AppController
         //get first 10 CVs from DB, for that specific employer and display them
     }
 
-    public function displayCVs(){
+    public function displayCVs($age, $lastSch, $experience){
         //pretty template for CVs
+
+//         <div class="container">
+//     <h1>Applicant</h1>
+//     <h3>Age: 23</h3>
+//     <h3>Last school: 23</h3>
+//     <h3>Experience: 23</h3>
+// </div>
+
+        $cvDisplay = '<div class="container mb-4 bg-dark text-light"><h3>Applicant</h3>';
+        $cvDisplay .= '<h5>Age:' . $age. '  Last school:' . $lastSch . '  Experience:'. $experience .'</h5></div>';
+ 
+        return $cvDisplay;
+
     }
 
-    public function filterCVs($jobName){
+    public function filterCVs($applicantId, $age, $lastSch, $experience){
         //add params to this function and filter by them
+        $q = "SELECT * FROM `cvs` WHERE `id`>0";
+
+        if(isset($age)){
+            $q .= " AND `age` = $age";
+        }
+
+        if(isset($lastSch)){
+            $q .= " AND `lastSch` = $lastSch";
+        }
+
+        if(isset($experience)){
+            $q .= " AND `experience` = $experience";
+        }
+
+        $myPrep = $this->db()->prepare($q);
+        $myPrep->execute();
+        return  $result = $myPrep->get_result()->fetch_all(MYSQLI_ASSOC);
+
     }
 }

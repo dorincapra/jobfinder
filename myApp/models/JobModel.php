@@ -35,6 +35,15 @@ class JobModel extends AppController
     }
 
 
+    public function getJobDetails($id){
+        $q = "SELECT * FROM `jobs` WHERE `id`=?;";
+        $myPrep = $this->db()->prepare($q);
+        $myPrep->bind_param("i", $id);
+        $myPrep->execute();
+        return $result = $myPrep->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+
 
     public function filterJobs($jobName, $salary, $location, $schedule, $employerId){
         $q = "SELECT * FROM `jobs` WHERE `id` IS NOT NULL";
@@ -61,46 +70,28 @@ class JobModel extends AppController
         $q = "SELECT * FROM `jobs` LIMIT 10";
         $myPrep = $this->db()->prepare($q);
         $myPrep->execute();
-
         return $result = $myPrep->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
 
-        //design for one job div
-    public function displayJob($jobName, $salary, $location, $schedule, $jobId){
 
-        //displays the job depending of the user type
-        if($_SESSION['accType'] == "applicant"){
-            $buttons = "<a class='btn btn-primary' href='#'>Apply</a>";
-        } else if($_SESSION['accType'] == "employer") {
-            $buttons = "<a class='btn btn-danger' href='#'>Delete</a>";
-        }
-
-        $displayString = "<div id='$jobId' class='container bg-dark text-light m-4'>";
-        $displayString .= "<br>Position name: " . $jobName;
-        $displayString .= "<br>Salary: " . $salary;
-        $displayString .= "<br>Location: " . $location;
-        $displayString .= "<br>Schedule: " . $schedule;
-        $displayString .= $buttons;
-        $displayString .= "</div>";
-                
-        return $displayString;
-    }
-
-    public function deleteJob($id){
+    public function deleteJob($jobId){
         //delete job based on id - through Delete button that is only in the employer's menu
+        $q = "DELETE from `jobs` WHERE `id` = ?";
+        $myPrep = $this->db()->prepare($q);
+        $myPrep->bind_param("i", $jobId);
+        return $myPrep->execute();
     }
 
-    public function applyToJob($jobId){
 
-        //locate in db the job based on jobId - get from there employerId 
-        //locate in the db the cV based on userId
-        //insert into `applications` jobid, applicantId, employerId
-        
-        $userId = $_SESSION(['userId']);
-        echo $jobId;
-        
+    //add in the application DB the details of who applied and for what job
+    public function applyToJob($employerId, $applicantId, $jobId){
+        $q = "INSERT INTO `applications`(`employerId`,`applicantId`, `jobId`) VALUES (?,?,?);";
+        $myPrep = $this->db()->prepare($q);
+        $myPrep->bind_param("iii", $employerId, $applicantId, $jobId);
+        return $myPrep->execute();
     }
+
 
 
     //not tested

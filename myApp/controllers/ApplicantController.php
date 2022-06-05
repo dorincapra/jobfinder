@@ -11,7 +11,7 @@ class ApplicantController extends AppController
         $jobModel = new JobModel;
 
         if(isset($_SESSION['user'])){
-            $hm = "Bine ai venit " . $_SESSION['user'] . "!";
+            $hm = "Welcome " . $_SESSION['user'] . "!";
             $data['mainContent'] = $hm;
             $data['mainContent'] .= $this->render(APP_PATH.VIEWS.'applicantView.html', $data);
 
@@ -23,15 +23,13 @@ class ApplicantController extends AppController
               
                 foreach($result as $result){
                   //display each job
-                  $displayString .= $jobModel->displayJob($result['jobName'],$result['salary'],$result['location'],$result['schedule'], $result['id']);
+                  $displayString .= $this->displayJob($result['jobName'],$result['salary'],$result['location'],$result['schedule'], $result['id']);
                 }
                 $data['mainContent'] .= $displayString;
             }
             else $data['mainContent'] .= "it did not work(handle the errors)";
-
         }
-
-        echo $this->render(APP_PATH.VIEWS.'baseLayout.html', $data);
+        echo $this->render(APP_PATH.VIEWS.'authedBaseLayout.html', $data);
 
     }
 }
